@@ -68,7 +68,7 @@ BASIC_IFC_ENTITIES = [
     "IfcCableSegment",
     "IfcChimney",
     "IfcColumn",
-    "IfcComnunicationsAppliance",
+    "IfcCommunicationsAppliance",
     "IfcCovering",
     "IfcCurtainWall",
     "IfcDiscreteAccessory",
