@@ -418,23 +418,31 @@ def add_property_facet(bsdd_property, parent_element):
         return
 
     value = None
-    if "allowedValues" in bsdd_property:
+    pattern = bsdd_property.get("pattern")
+    allowed_values = bsdd_property.get("allowedValues")
+    predefined_value = bsdd_property.get("predefinedValue")
+
+    if pattern:
+        value = ids.Restriction(options={"pattern": pattern})
+    elif allowed_values:
         value = ids.Restriction(
             options={
-                "enumeration": list(
-                    map(lambda x: x["value"], bsdd_property["allowedValues"])
-                )
+                "enumeration": [
+                    x.get("value") for x in allowed_values if x.get("value") is not None
+                ]
             }
         )
-    elif "predefinedValue" in bsdd_property:
-        value = bsdd_property["predefinedValue"]
+    elif predefined_value:
+        value = predefined_value
 
     property_facet = ids.Property(
         bsdd_property["propertySet"],
         bsdd_property["propertyCode"],
         value,
-        get_data_type(bsdd_property["dataType"], bsdd_property["propertyUri"]).upper(),
-        bsdd_property["propertyUri"],
+        get_data_type(
+            bsdd_property.get("dataType"), bsdd_property.get("propertyUri")
+        ).upper(),
+        bsdd_property.get("propertyUri"),
     )
     parent_element.append(property_facet)
 
@@ -533,7 +541,7 @@ def main(xml_file, dictionary_uri, ids_version, ifc_entities, use_cache):
 
     if use_cache:
         os.makedirs(CACHE_DIR, exist_ok=True)
-        
+
     dictionary_with_classes = fetch_classes(BASE_URL, dictionary_uri, use_cache)
 
     ids_document = ids.Ids(
