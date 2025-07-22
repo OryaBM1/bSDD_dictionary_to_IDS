@@ -2,6 +2,7 @@ import argparse
 import hashlib
 import json
 import os
+import time
 import requests
 from collections import defaultdict
 from tqdm import tqdm
@@ -12,6 +13,9 @@ APP_VERSION = "1.0"
 BASE_URL = "https://api.bsdd.buildingsmart.org"
 FETCH_LIMIT = 1000
 CACHE_DIR = "cache"
+REQUEST_HEADERS = {"User-Agent": f"bSDD_dictionary_to_IDS/{APP_VERSION}"}
+LAST_BSDD_API_CALL = 0.0
+BSDD_API_RATE_LIMIT = 5  # max calls per second
 
 IFC_VERSIONS = "IFC4X3_ADD2"  # 'IFC4 IFC4X3_ADD2'
 
@@ -113,10 +117,40 @@ BASIC_IFC_ENTITIES = [
     "IfcWindow",
 ]
 
-REQUEST_HEADERS = {"User-Agent": f"bSDD_dictionary_to_IDS/{APP_VERSION}"}
 
 dictionary_map = {}
 classification_map = {}
+
+
+def get_bsdd_api(url, params=None, headers=None, max_retries=5):
+    """Generic rate-limited GET request for bSDD API (global timer, with retry/backoff on 429/5xx)."""
+    global LAST_BSDD_API_CALL
+    if headers is None:
+        headers = REQUEST_HEADERS
+    min_interval = 1.0 / BSDD_API_RATE_LIMIT
+    backoff = 2.0  # initial backoff in seconds
+    for attempt in range(max_retries):
+        now = time.time()
+        elapsed = now - LAST_BSDD_API_CALL
+        if elapsed < min_interval:
+            time.sleep(min_interval - elapsed)
+        response = requests.get(url, params=params, headers=headers)
+        LAST_BSDD_API_CALL = time.time()
+        if response.status_code == 429:
+            print(f"Rate limit hit (429). Backing off for {backoff:.1f}s...")
+            time.sleep(backoff)
+            backoff *= 2  # exponential backoff
+            continue
+        if 500 <= response.status_code < 600:
+            print(
+                f"Server error ({response.status_code}). Retrying in {backoff:.1f}s..."
+            )
+            time.sleep(backoff)
+            backoff *= 2
+            continue
+        return response
+    print(f"Failed to fetch {url} after {max_retries} retries.")
+    return response  # return last response (likely error)
 
 
 def url_to_filename(url):
@@ -183,7 +217,7 @@ def fetch_all_paginated(endpoint, params={}):
 
     while True:
         params["offset"] = offset
-        response = requests.get(endpoint, params=params, headers=REQUEST_HEADERS)
+        response = get_bsdd_api(endpoint, params=params)
         if response.status_code != 200:
             print(f"Failed to fetch data: {response.status_code}")
             break
@@ -210,7 +244,7 @@ def fetch_dictionary(base_url, dictionary_uri, use_cache):
 
     endpoint = f"{base_url}/api/Dictionary/v1"
     params = {"Uri": dictionary_uri, "IncludeTestDictionaries": True}
-    response = requests.get(endpoint, params=params, headers=REQUEST_HEADERS)
+    response = get_bsdd_api(endpoint, params=params)
     if response.status_code != 200:
         print(f"Failed to fetch dictionary: {response.status_code}")
         return None
@@ -251,7 +285,7 @@ def fetch_classes(base_url, dictionary_uri, use_cache):
 
     while True:
         params["offset"] = offset
-        response = requests.get(endpoint, params=params, headers=REQUEST_HEADERS)
+        response = get_bsdd_api(endpoint, params=params)
         if response.status_code != 200:
             print(f"Failed to fetch data: {response.status_code}")
             break
@@ -296,7 +330,7 @@ def fetch_class_details(base_url, class_uri, use_cache):
         "IncludeClassProperties": True,
         "IncludeClassRelations": True,
     }
-    response = requests.get(endpoint, params=params, headers=REQUEST_HEADERS)
+    response = get_bsdd_api(endpoint, params=params)
     if response.status_code != 200:
         print(f"Failed to fetch class: {class_uri}, {response.status_code}")
         return None
