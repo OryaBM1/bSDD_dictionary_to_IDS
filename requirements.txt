@@ -1,0 +1,4 @@
+# Minimal pip requirements for bSDD_dictionary_to_IDS
+ifctester
+tqdm
+requests

@@ -4,9 +4,25 @@ Convert a bSDD Dictionary into an IDS
 
 ## Description
 
-This Python script facilitates the conversion of buildingSMART Data Dictionary (bSDD) entries into a Information Delivery Specification (IDS) file.
+This script is designed to convert bSDD dictionaries that define object types ("object dictionary"/"object type library" style) into a specific form of Information Delivery Specification (IDS). It is not intended for use with bSDD classes representing materials or groups of properties, and is not a comprehensive bSDD-to-IDS converter.
 
-Helps with validation of BIM models against bSDD specifications, streamlining compliance checks and quality assurance workflows.
+**Key points:**
+
+- The script creates one IDS specification requiring any IFC object (from a default, non-comprehensive list of common entities, or a user-supplied list) to have a classification from the selected bSDD dictionary.
+- For every class in the dictionary, it creates a requirement validating every object classified as that type from the dictionary.
+- It does not (yet) support the full IFC schema, class inheritance, or validation of allowed property sets and data types.
+- The script is tailored for practical use cases and may not cover all bSDD/IDS scenarios.
+
+**Why use this?**
+It helps automate the creation of IDS files for validating BIM models against object-type dictionaries published in bSDD, streamlining compliance checks and quality assurance workflows for typical object libraries.
+
+**Limitations:**
+
+- Not suitable for bSDD classes representing materials or property groups.
+- Does not check IFC class inheritance or all allowed property sets.
+- The included IFC entity list is not comprehensive; you can pass your own.
+
+Contributions to improve coverage and functionality are welcome!
 
 ## Installation
 
@@ -14,9 +30,25 @@ Clone this repository to your local machine using:
 
 ```bash
 git clone https://github.com/BIM-Tools/bSDD_dictionary_to_IDS.git
+cd bSDD_dictionary_to_IDS
 ```
 
-Navigate to the project directory.
+### Install Python dependencies
+
+It is recommended to use a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install the required packages using pip:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install all necessary dependencies, including `ifctester` and `tqdm`.
 
 ## Usage
 
@@ -60,7 +92,7 @@ options:
                         Applicable IFC entities
   -c, --use_cache       Use local cache
 
-Example command: python bsdd_to_ids.py basis_bouwproducten_oene.ids https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/latest
+Example command: python bsdd_to_ids.py examples/basis_bouwproducten_oene.ids https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/latest
 ```
 
 ## Contributing
