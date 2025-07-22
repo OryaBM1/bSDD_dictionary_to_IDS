@@ -520,11 +520,22 @@ def add_class_specification(dictionary_name, dictionary_class, ids_document, use
     if not class_details:
         return
 
-    specification = ids.Specification(
-        name=class_details["name"],
-        ifcVersion=IFC_VERSIONS,
-        description=f"Verifies that each object classified as '{class_details['name']}' meets the requirements from the bSDD class: {dictionary_class['uri']}",
-    )
+    # Map bSDD 'Definition' to IDS '@description', 'Description' to IDS '@instructions'
+    spec_dict = {
+        "name": class_details["name"],
+        "ifcVersion": IFC_VERSIONS,
+    }
+    class_description = class_details.get("Definition")
+    if class_description:
+        spec_dict["description"] = class_description
+    class_instructions = class_details.get("Description")
+    if class_instructions:
+        spec_dict["instructions"] = class_instructions
+    else:
+        spec_dict["instructions"] = (
+            f"Verifies that each object classified as '{class_details['name']}' meets the requirements from the bSDD class: {dictionary_class['uri']}"
+        )
+    specification = ids.Specification(**spec_dict)
 
     # TODO check why uri is not accepted by IfcTester
     classification = ids.Classification(

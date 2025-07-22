@@ -3,12 +3,12 @@
     <info>
         <title>Fruit and vegetables</title>
         <copyright>bSDD Agri demo company</copyright>
-        <version>1.1</version>
+        <version>1.6</version>
         <description>IDS for bSDD dictionary Fruit and vegetables</description>
-        <date>2024-06-28</date>
+        <date>2025-05-20</date>
     </info>
     <specifications>
-        <specification name="Presence of Fruit and vegetables" ifcVersion="IFC4X3_ADD2" description="Ensures that all applicable objects in the model have a classification from the 'Fruit and vegetables' bSDD dictionary: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1">
+        <specification name="Presence of Fruit and vegetables" ifcVersion="IFC4X3_ADD2" description="Ensures that all applicable objects in the model have a classification from the 'Fruit and vegetables' bSDD dictionary: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6">
             <applicability minOccurs="0" maxOccurs="unbounded">
                 <entity>
                     <name>
@@ -26,7 +26,7 @@
                             <xs:enumeration value="IFCCABLESEGMENT" />
                             <xs:enumeration value="IFCCHIMNEY" />
                             <xs:enumeration value="IFCCOLUMN" />
-                            <xs:enumeration value="IFCCOMNUNICATIONSAPPLIANCE" />
+                            <xs:enumeration value="IFCCOMMUNICATIONSAPPLIANCE" />
                             <xs:enumeration value="IFCCOVERING" />
                             <xs:enumeration value="IFCCURTAINWALL" />
                             <xs:enumeration value="IFCDISCRETEACCESSORY" />
@@ -81,7 +81,7 @@
                 </classification>
             </requirements>
         </specification>
-        <specification name="Apple" ifcVersion="IFC4X3_ADD2" description="Verifies that each object classified as 'Apple' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/apple">
+        <specification name="Apple" ifcVersion="IFC4X3_ADD2" instructions="Verifies that each object classified as 'Apple' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/class/apple">
             <applicability minOccurs="0" maxOccurs="unbounded">
                 <classification>
                     <value>
@@ -95,10 +95,10 @@
             <requirements>
                 <entity>
                     <name>
-                        <simpleValue>IFCCOMMUNICATIONSAPPLIANCE</simpleValue>
+                        <simpleValue>IFCCOMMUNICATIONAPPLIANCE</simpleValue>
                     </name>
                 </entity>
-                <property dataType="IFCREAL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/volume" cardinality="required">
+                <property dataType="IFCREAL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/prop/volume" cardinality="required">
                     <propertySet>
                         <simpleValue>SizeSet</simpleValue>
                     </propertySet>
@@ -106,7 +106,7 @@
                         <simpleValue>volume</simpleValue>
                     </baseName>
                 </property>
-                <property dataType="IFCREAL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/height" cardinality="required">
+                <property dataType="IFCREAL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/prop/height" cardinality="required">
                     <propertySet>
                         <simpleValue>SizeSet</simpleValue>
                     </propertySet>
@@ -116,7 +116,7 @@
                 </property>
             </requirements>
         </specification>
-        <specification name="Fruit" ifcVersion="IFC4X3_ADD2" description="Verifies that each object classified as 'Fruit' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/fruit">
+        <specification name="Fruit" ifcVersion="IFC4X3_ADD2" instructions="Verifies that each object classified as 'Fruit' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/class/fruit">
             <applicability minOccurs="0" maxOccurs="unbounded">
                 <classification>
                     <value>
@@ -127,9 +127,18 @@
                     </system>
                 </classification>
             </applicability>
-            <requirements />
+            <requirements>
+                <property dataType="IFCLABEL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/prop/country-of-origin" cardinality="required">
+                    <propertySet>
+                        <simpleValue>GeoSet</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>country-of-origin</simpleValue>
+                    </baseName>
+                </property>
+            </requirements>
         </specification>
-        <specification name="Granny Smith" ifcVersion="IFC4X3_ADD2" description="Verifies that each object classified as 'Granny Smith' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/grannysmith">
+        <specification name="Granny Smith" ifcVersion="IFC4X3_ADD2" instructions="Verifies that each object classified as 'Granny Smith' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/class/grannysmith">
             <applicability minOccurs="0" maxOccurs="unbounded">
                 <classification>
                     <value>
@@ -141,7 +150,7 @@
                 </classification>
             </applicability>
             <requirements>
-                <property dataType="IFCLABEL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/color" cardinality="required">
+                <property dataType="IFCLABEL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/prop/color" cardinality="required">
                     <propertySet>
                         <simpleValue>undefined_set</simpleValue>
                     </propertySet>
@@ -155,7 +164,7 @@
                         </xs:restriction>
                     </value>
                 </property>
-                <property dataType="IFCREAL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/height" cardinality="required">
+                <property dataType="IFCREAL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/prop/height" cardinality="required">
                     <propertySet>
                         <simpleValue>SizeSet</simpleValue>
                     </propertySet>
@@ -165,7 +174,7 @@
                 </property>
             </requirements>
         </specification>
-        <specification name="Tomato" ifcVersion="IFC4X3_ADD2" description="Verifies that each object classified as 'Tomato' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/tomato">
+        <specification name="Tomato" ifcVersion="IFC4X3_ADD2" instructions="Verifies that each object classified as 'Tomato' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/class/tomato">
             <applicability minOccurs="0" maxOccurs="unbounded">
                 <classification>
                     <value>
@@ -177,7 +186,7 @@
                 </classification>
             </applicability>
             <requirements>
-                <property dataType="IFCLABEL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/color" cardinality="required">
+                <property dataType="IFCLABEL" uri="https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/prop/color" cardinality="required">
                     <propertySet>
                         <simpleValue>undefined_set</simpleValue>
                     </propertySet>
@@ -194,7 +203,7 @@
                 </property>
             </requirements>
         </specification>
-        <specification name="Vegetable" ifcVersion="IFC4X3_ADD2" description="Verifies that each object classified as 'Vegetable' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/veg">
+        <specification name="Vegetable" ifcVersion="IFC4X3_ADD2" instructions="Verifies that each object classified as 'Vegetable' meets the requirements from the bSDD class: https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.6/class/veg">
             <applicability minOccurs="0" maxOccurs="unbounded">
                 <classification>
                     <value>
